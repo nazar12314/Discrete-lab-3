@@ -6,3 +6,10 @@ This algorithm is known as an open-key cypher, where the sender generates a pair
 
 ### Implementation
 You can check our implementation of the algorithm [here](../main/rsa.py)
+
+
+## Usage
+- First create a server:
+```bash
+$ python3 server.py
+```
