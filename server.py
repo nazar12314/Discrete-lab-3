@@ -1,6 +1,7 @@
 import socket
 import threading
 import rsa
+from hashlib import sha384
 
 class Server:
 
@@ -38,11 +39,12 @@ class Server:
     def broadcast(self, msg: str):
         for client in self.clients:
             encoded = rsa.encode(self.clients[client][:2], msg)
-            client.send(encoded.encode())
+            client.send((sha384(msg.encode()).hexdigest()+"|"+encoded).encode())
 
     def handle_client(self, c: socket, addr):
         while True:
             msg = c.recv(1024).decode()
+            msg_hash, msg = msg.split("|")
             # decode message using clients' keys
             decoded = rsa.decode(self.clients[c][1:][::-1], msg)
 
@@ -50,7 +52,7 @@ class Server:
                 if client != c:
                     # encode message using clients' keys
                     encoded = rsa.encode(self.clients[client][:2], decoded)
-                    client.send(encoded.encode())
+                    client.send((msg_hash+"|"+encoded).encode())
 
 if __name__ == "__main__":
     s = Server(9001)
