@@ -1,5 +1,4 @@
 import random
-import math
 import string
 
 
@@ -46,6 +45,16 @@ def convert_string_to_number(message):
     for char in message:
         char_number = items[char]
         result += char_number
+    return result
+
+
+def convert_number_to_string(converted_message):
+    characters = string.printable
+    result = ""
+    items = {str(num) if num >= 10 else "0" + str(num): characters[num] for num in range(len(characters))}
+    for num in [converted_message[i:i+2] for i in range(0, len(converted_message), 2)]:
+        char = items[num]
+        result += char
     return result
 
 
