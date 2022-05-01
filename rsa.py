@@ -39,11 +39,11 @@ def generate_public_and_private_keys():
                 return (e, p * q), (d, p * q)
 
 
-def convert_string_to_number(strng):
+def convert_string_to_number(message):
     characters = string.printable
     items = {characters[num]: str(num) if num >= 10 else "0" + str(num) for num in range(len(characters))}
     result = ""
-    for char in strng:
+    for char in message:
         char_number = items[char]
         result += char_number
     return result
