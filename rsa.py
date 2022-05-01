@@ -51,29 +51,20 @@ def convert_string_to_number(strng):
 
 def encode(public_keys, message:str):
     e, n = public_keys
-    N = 25
-    while True:
-        if N*100+25<n:
-            N = N*100+25
-        else: break
     encoded = ""
-    split = len(str(N))
-    for i in range(math.ceil(len(message)/split)):
-        #block = f"{message[i * split:(i + 1) * split]}{'0'*(split-len(message[i * split:(i + 1) * split]))}"
-        block = message[i * split:(i + 1) * split]
+    for i in range(len(message)//2):
+        block = message[i*2:(i + 1)*2]
         encoded = encoded + str(int(block) ** e % n) + ","
-    return encoded+str(split)
+    return encoded[:-1]
 
 
 def decode(private_keys, encoded_message):
     d, n = private_keys
     blocks = [int(x) for x in encoded_message.split(",")]
-    split = blocks[-1]
     decoded = ""
-    for block in blocks[:-1]:
-        print(block)
+    for block in blocks:
         calculated = str(block ** d % n)
-        decoded = decoded + "0"*(split-len(calculated)) + calculated
+        decoded = decoded + "0"*(2-len(calculated)) + calculated
     return decoded
 
 
