@@ -18,3 +18,6 @@ $ python3 server.py
 ```bash
 $ python3 client.py
 ```
+#### Here you go, now you are able to send and receive messages. 
+
+## Example
