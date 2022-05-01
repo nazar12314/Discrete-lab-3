@@ -23,4 +23,4 @@ $ python3 client.py
 ## Example
 
 ## Features
-In order to respond to a 100% safety of our messaging, we implemented some features that allows us not to expierence troubles with message-leak in case when the server crashes. Under the hood, we implement another RSA encoding on the server side that encodes keys passed by the client. Thus messages are never being passed decoded inside a servers, which guarantees us their full confidentiality. 
+In order to respond to a 100% safety of our messaging, we implemented some features that allows us not to experience troubles with message-leak in case when the server crashes. Under the hood, we implemented another RSA encoding on the server side that encodes keys passed by the client. Thus messages are never being passed decoded inside a server, which guarantees us their full confidentiality. 
