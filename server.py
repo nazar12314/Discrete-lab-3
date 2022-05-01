@@ -31,27 +31,26 @@ class Server:
 
             client_keys_encoded = c.recv(1024).decode()
             client_keys = [int(key) for key in rsa.decode(private, client_keys_encoded).split(",")]
-            print(client_keys)
             self.clients[c] = client_keys  # save keys as (e, n, d)
 
             threading.Thread(target=self.handle_client,args=(c,addr,)).start()
 
     def broadcast(self, msg: str):
         for client in self.clients:
-
-            # encrypt the message
-
-            # ...
-
-            client.send(msg.encode())
+            encoded = rsa.encode(self.clients[client][:2], msg)
+            client.send(encoded.encode())
 
     def handle_client(self, c: socket, addr):
         while True:
-            msg = c.recv(1024)
+            msg = c.recv(1024).decode()
+            # decode message using clients' keys
+            decoded = rsa.decode(self.clients[c][1:][::-1], msg)
 
-            for client in self.clients:
+            for client in self.clients.keys():
                 if client != c:
-                    client.send(msg)
+                    # encode message using clients' keys
+                    encoded = rsa.encode(self.clients[client][:2], decoded)
+                    client.send(encoded.encode())
 
 if __name__ == "__main__":
     s = Server(9001)
