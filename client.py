@@ -1,14 +1,17 @@
 import socket
 import threading
+import rsa
 
 class Client:
     def __init__(self, server_ip: str, port: int, username: str) -> None:
         self.server_ip = server_ip
         self.port = port
         self.username = username
+        self.public = None
+        self.private = None
+        self.server_keys = None
 
     def init_connection(self):
-        # connecting client to a server
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             self.s.connect((self.server_ip, self.port))
@@ -18,24 +21,28 @@ class Client:
 
         self.s.send(self.username.encode())
 
-        # create key pairs
+        self.public, self.private = rsa.generate_public_and_private_keys()
 
         # exchange public keys
+        keys = self.s.recv(1024).decode()  # get public server keys
+        self.server_keys = (int(key) for key in keys.split(","))
 
-        # receive the encrypted secret key
+        # send encoded clients' keys. Looks like: (e, n, d)
+        secret = rsa.encode(self.server_keys, ",".join(str(key) for key in self.public+self.private[:1]))
+        self.s.send(secret.encode())
 
         message_handler = threading.Thread(target=self.read_handler,args=())
         message_handler.start()
         input_handler = threading.Thread(target=self.write_handler,args=())
         input_handler.start()
 
-    def read_handler(self): 
+    def read_handler(self):
         while True:
             message = self.s.recv(1024).decode()
 
             # decrypt message with the secrete key
 
-            # ... 
+            # ...
 
 
             print(message)
