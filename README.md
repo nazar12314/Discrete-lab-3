@@ -27,4 +27,4 @@ https://user-images.githubusercontent.com/59284695/166151814-93210655-1e23-46b0-
 
 
 ## Features
-In order to respond to a 100% safety of our messaging, we implemented some features that allows us not to experience troubles with message-leak in case when the server crashes. Under the hood, we implemented another RSA encoding on the server side that encodes keys passed by the client. Thus messages are never being passed decoded inside a server, which guarantees us their full confidentiality. 
+In order to respond to a 100% safety of our messaging, we implemented some features that allows us not to experience troubles with message-leak in case when the server crashes. Under the hood, we implemented another RSA encoding on the server side that encodes keys passed by the client. Thus messages are never being passed decoded inside a server. Every user has his own keys, so that every person is able to receive the same message but encoded differently. This guarantees complete security of messagging, and even if its full power can't be totaly seen in this simple example, this method has a huge power when it takes a serious projects.
