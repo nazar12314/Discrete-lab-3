@@ -21,3 +21,6 @@ $ python3 client.py
 #### Here you go, now you are able to send and receive messages. 
 
 ## Example
+
+## Features
+In order to respond to a 100% safety of our messaging, we implemented some features that allows us not to expierence troubles with message-leak in case when the server crashes. Under the hood, we implement another RSA encoding on the server side that encodes keys passed by the client. Thus messages are never being passed decoded inside a servers, which guarantees us their full confidentiality. 
