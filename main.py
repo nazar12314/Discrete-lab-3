@@ -33,8 +33,22 @@ def generate_public_and_private_keys():
         for num_2 in range(3, maximum, 2):
             if num_2 * e % maximum == 1:
                 d = num_2
-                return (p * q, e), (p * q, d)
+                return (e, p * q), (d, p * q)
 
-a, b = generate_public_and_private_keys()
-print(a)
-print(b)
+
+def encode(public_keys, message):
+    e, n = public_keys
+    return message ** e % n
+
+
+def decode(private_keys, encoded_message):
+    d, n = private_keys
+    return encoded_message ** d % n
+
+
+if __name__ == "__main__":
+    public, private = generate_public_and_private_keys()
+    message = int(input("Message: "))
+    encoded = encode(public, message)
+    decoded = decode(private, encoded)
+    print(f"Message: {message}, encoded: {encoded}, decoded: {decoded}")
