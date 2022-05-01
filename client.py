@@ -1,6 +1,7 @@
 import socket
 import threading
 import rsa
+from hashlib import sha384
 
 class Client:
     def __init__(self, server_ip: str, port: int, username: str) -> None:
@@ -38,14 +39,17 @@ class Client:
 
     def read_handler(self):
         while True:
-            message = self.s.recv(1024).decode()
+            msg_hash, message = self.s.recv(1024).decode().split("|")
             decoded = rsa.decode(self.private, message)
-            print(decoded)
+            if msg_hash == sha384(decoded.encode()).hexdigest():
+                print(decoded)
+            else:
+                print("Message integrity error!")
 
     def write_handler(self):
         while True:
             message = input()
-            encoded = rsa.encode(self.public, message)
+            encoded = sha384(message.encode()).hexdigest()+"|"+rsa.encode(self.public, message)
             self.s.send(encoded.encode())
 
 if __name__ == "__main__":
