@@ -21,7 +21,7 @@ def are_relative_primes(first, second):
 
 
 def generate_public_and_private_keys():
-    prime_numbers = generate_primes(100, 1000)
+    prime_numbers = generate_primes(50, 500)
     p, q = random.choices(prime_numbers, k=2)
     maximum = (p - 1) * (q - 1)
 
@@ -38,15 +38,14 @@ def generate_public_and_private_keys():
                 return (e, p * q), (d, p * q)
 
 
-def convert_string_to_number(message):
+def convert_string_to_number(strng):
     characters = string.printable
     items = {characters[num]: str(num) if num >= 10 else "0" + str(num) for num in range(len(characters))}
     result = ""
-    for char in message:
+    for char in strng:
         char_number = items[char]
         result += char_number
     return result
-
 
 def convert_number_to_string(converted_message):
     characters = string.printable
@@ -59,10 +58,11 @@ def convert_number_to_string(converted_message):
 
 
 def encode(public_keys, message:str):
+    converted_message = convert_string_to_number(message)
     e, n = public_keys
     encoded = ""
-    for i in range(len(message)//2):
-        block = message[i*2:(i + 1)*2]
+    for i in range(len(converted_message)//2):
+        block = converted_message[i*2:(i + 1)*2]
         encoded = encoded + str(int(block) ** e % n) + ","
     return encoded[:-1]
 
@@ -74,7 +74,7 @@ def decode(private_keys, encoded_message):
     for block in blocks:
         calculated = str(block ** d % n)
         decoded = decoded + "0"*(2-len(calculated)) + calculated
-    return decoded
+    return convert_number_to_string(decoded)
 
 
 if __name__ == "__main__":
@@ -82,4 +82,4 @@ if __name__ == "__main__":
     message = input("Message: ")
     encoded = encode(public, message)
     decoded = decode(private, encoded)
-    print(f"Message: {message}, encoded: {encoded}, decoded: {decoded}")
+    print(decoded)
