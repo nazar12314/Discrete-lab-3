@@ -13,3 +13,8 @@ You can check our implementation of the algorithm [here](../main/rsa.py)
 ```bash
 $ python3 server.py
 ```
+
+- Then in other terminals create as many client as you want:
+```bash
+$ python3 client.py
+```
